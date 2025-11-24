@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    environment {
+        REPO_URL = 'https://github.com/ZhaoBoxiong/jenkins_flow.git'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    def branchName = env.BRANCH_NAME ?: 'main'
+                    def repoUrl = env.REPO_URL
+
+                    checkout scm: [
+                        $class: 'GitSCM',
+                        branches: [[name: "*/${branchName}"]],
+                        extensions: [],
+                        userRemoteConfigs: [[url: repoUrl]]
+                    ]
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Building...'
+            }
+        }
+    }
+}
